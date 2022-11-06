@@ -1,14 +1,45 @@
+const gameFlow = (() => {
+
+  let gameTurn = false;
+
+  const initGame = () => {
+    displayController.printGameBoard();
+    addEventsClick();
+  }
+
+  const addEventsClick = () => {
+    const table = document.querySelector('table');
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        table.rows[i].cells[j].addEventListener('click', (e) => {
+          let i = e.target.parentElement.rowIndex;
+          let j = e.target.cellIndex
+          gameBoard.addMark(i, j, gameTurn) ? gameTurn = !gameTurn : gameTurn = gameTurn;
+        });
+      }
+    }
+  }
+
+  return {
+    initGame
+  };
+})();
+
 const gameBoard = (() => {
   const gridBoard = [
-    ['', 'x', 'o'],
-    ['o', 'x', 'o'],
-    ['x', 'o', 'x']
+    ['', '', ''],
+    ['', '', ''],
+    ['', '', '']
   ];
   const addMark = (i, j, piece) => {
-    if(gridBoard[i][j] === '') {
-      gridBoard[i][j] = piece;
-      displayController.updateCell(i, j, piece)
+    if (gridBoard[i][j] === '') {
+      let mark
+      piece ? mark = 'o' : mark = 'x';
+      gridBoard[i][j] = mark;
+      displayController.updateCell(i, j, mark);
+      return true;
     }
+    return false;
   }
 
   return { gridBoard, addMark };
@@ -30,12 +61,12 @@ const displayController = (() => {
       }
     }
   }
-  
+
   const updateCell = (i, j, piece) => {
     const table = document.querySelector('table');
-     table.rows[i].cells[j].innerHTML = piece;
+    table.rows[i].cells[j].innerHTML = piece;
   }
-  return {printGameBoard, updateCell}
+  return { printGameBoard, updateCell }
 })();
 
-displayController.printGameBoard();
+gameFlow.initGame();
