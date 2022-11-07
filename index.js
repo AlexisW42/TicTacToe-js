@@ -96,9 +96,9 @@ const gameBoard = (() => {
     let same = 0;
     for (let j = 0; j < 3; j++) {
       for (let i = 0; i < 3; i++) {
-        if ((gameBoard.gridBoard[0][j] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[0][j] !== '')) {
+        if ((gridBoard[0][j] === gridBoard[i][j]) && (gridBoard[0][j] !== '')) {
           same++;
-          if (same === 3) return gameBoard.gridBoard[i][j];
+          if (same === 3) return gridBoard[i][j];
         }
       }
       same = 0;
@@ -109,18 +109,18 @@ const gameBoard = (() => {
   const checkDiagonals = () => {
     let same = 0;
     for (let i = 0; i < 3; i++) {
-      if ((gameBoard.gridBoard[0][0] === gameBoard.gridBoard[i][i]) && (gameBoard.gridBoard[0][0] !== '')) {
+      if ((gridBoard[0][0] === gridBoard[i][i]) && (gridBoard[0][0] !== '')) {
         same++;
-        if (same === 3) return gameBoard.gridBoard[i][i];
+        if (same === 3) return gridBoard[i][i];
       }
     }
     same = 0;
 
     let i = 0, j = 2;
     while (i < 3) {
-      if ((gameBoard.gridBoard[0][2] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[0][2] !== '')) {
+      if ((gridBoard[0][2] === gridBoard[i][j]) && (gridBoard[0][2] !== '')) {
         same++;
-        if (same === 3) return gameBoard.gridBoard[i][j];
+        if (same === 3) return gridBoard[i][j];
       }
       i++; j--;
     }
@@ -131,7 +131,7 @@ const gameBoard = (() => {
     let noSpaceEmpty = true;
     for (let j = 0; j < 3; j++) {
       for (let i = 0; i < 3; i++) {
-        if (gameBoard.gridBoard[i][j] === '') return noSpaceEmpty = false;
+        if (gridBoard[i][j] === '') return noSpaceEmpty = false;
       }
     }
     return noSpaceEmpty;
