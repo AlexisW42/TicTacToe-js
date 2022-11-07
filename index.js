@@ -5,6 +5,7 @@ const gameFlow = (() => {
   const initGame = () => {
     displayController.printGameBoard();
     addEventsClick();
+    addEventsRestart();
   }
 
   const addEventsClick = () => {
@@ -22,15 +23,21 @@ const gameFlow = (() => {
   }
 
   const checkGameboard = () => {
-    if (gameBoard.checkWin() === 'tie game')
-      console.log('Tie Game');
-
-    else if (gameBoard.checkWin() !== '')
-      console.log(`${gameBoard.checkWin()} wins`);
+    if (gameBoard.checkWin() !== '')
+      displayController.printGameOverScreen(gameBoard.checkWin());
   }
 
   const changeTurn = () => {
     gameTurn = !gameTurn;
+  }
+
+  const addEventsRestart = () => {
+    const finalRestart = document.querySelector('.final-restart');
+    finalRestart.addEventListener('click', (e) => {
+      gameBoard.clear();
+      displayController.closeGameOverScreen();
+      displayController.printGameBoard();
+    });
   }
 
   return {
@@ -75,9 +82,9 @@ const gameBoard = (() => {
     let same = 0;
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < 3; j++) {
-        if ((gameBoard.gridBoard[i][0] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[i][0] !== '')) {
+        if ((gridBoard[i][0] === gridBoard[i][j]) && (gridBoard[i][0] !== '')) {
           same++;
-          if (same === 3) return gameBoard.gridBoard[i][j];
+          if (same === 3) return gridBoard[i][j];
         }
       }
       same = 0;
@@ -130,8 +137,15 @@ const gameBoard = (() => {
     return noSpaceEmpty;
   }
 
-  return { gridBoard, addMark, checkWin };
-  
+  const clear = () => {
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        gridBoard[i][j] = '';
+      }
+    }
+  }
+  return { gridBoard, addMark, checkWin, clear };
+
 })();
 
 const player = (name, piece) => {
@@ -142,6 +156,9 @@ const player = (name, piece) => {
 };
 
 const displayController = (() => {
+  const endScreen = document.querySelector('.game-over-screen');
+  const finalMessagePlace = document.querySelector('.message')
+
   const printGameBoard = () => {
     const table = document.querySelector('table');
     for (let i = 0; i < 3; i++) {
@@ -157,7 +174,29 @@ const displayController = (() => {
     piece ? mark = '⭕️' : mark = '✖️';
     table.rows[i].cells[j].innerHTML = mark;
   }
-  return { printGameBoard, updateCell }
+
+  const printGameOverScreen = (result) => {
+    endScreen.style.display = 'grid';
+    finalMessagePlace.innerHTML = finalMessage(result);
+  }
+
+  const finalMessage = (result) => {
+    if (result === 'x') {
+      return `Congratulations 🎉️
+                <br>✖️ wins¡ 😎️`;
+    }
+    else if (result === 'o') {
+      return `Congratulations 🎉️
+                <br>⭕️ wins¡ 😎️`;
+    }
+    return `Tie Game 😉️`;
+  }
+
+  const closeGameOverScreen = () =>{
+    endScreen.style.display = 'none';
+  }
+
+  return { printGameBoard, updateCell, printGameOverScreen, closeGameOverScreen }
 })();
 
 gameFlow.initGame();
