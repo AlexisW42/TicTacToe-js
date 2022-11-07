@@ -22,7 +22,10 @@ const gameFlow = (() => {
   }
 
   const checkGameboard = () => {
-    if (gameBoard.checkWin() !== '')
+    if (gameBoard.checkWin() === 'tie game')
+      console.log('Tie Game');
+
+    else if (gameBoard.checkWin() !== '')
       console.log(`${gameBoard.checkWin()} wins`);
   }
 
@@ -55,12 +58,16 @@ const gameBoard = (() => {
   const checkWin = () => {
     if (checkRows() !== '')
       return checkRows();
-    else if (checkColumns() !== '') {
+
+    else if (checkColumns() !== '')
       return checkColumns();
-    }
-    else if (checkDiagonals() !== '') {
+
+    else if (checkDiagonals() !== '')
       return checkDiagonals();
-    }
+
+    else if (tieGame() === true)
+      return 'tie game';
+
     return '';
   }
 
@@ -112,7 +119,19 @@ const gameBoard = (() => {
     }
     return '';
   }
+
+  const tieGame = () => {
+    let noSpaceEmpty = true;
+    for (let j = 0; j < 3; j++) {
+      for (let i = 0; i < 3; i++) {
+        if (gameBoard.gridBoard[i][j] === '') return noSpaceEmpty = false;
+      }
+    }
+    return noSpaceEmpty;
+  }
+
   return { gridBoard, addMark, checkWin };
+  
 })();
 
 const player = (name, piece) => {
