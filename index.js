@@ -13,11 +13,21 @@ const gameFlow = (() => {
       for (let j = 0; j < 3; j++) {
         table.rows[i].cells[j].addEventListener('click', (e) => {
           let i = e.target.parentElement.rowIndex;
-          let j = e.target.cellIndex
-          gameBoard.addMark(i, j, gameTurn) ? gameTurn = !gameTurn : gameTurn = gameTurn;
+          let j = e.target.cellIndex;
+          if (gameBoard.addMark(i, j, gameTurn)) changeTurn();
+          checkGameboard();
         });
       }
     }
+  }
+
+  const checkGameboard = () => {
+    if (gameBoard.checkWin() !== '')
+      console.log(`${gameBoard.checkWin()} wins`);
+  }
+
+  const changeTurn = () => {
+    gameTurn = !gameTurn;
   }
 
   return {
@@ -42,7 +52,44 @@ const gameBoard = (() => {
     return false;
   }
 
-  return { gridBoard, addMark };
+  const checkWin = () => {
+    if (checkRows() !== '')
+      return checkRows();
+    else if (checkColumns() !== '') {
+      return checkColumns();
+    }
+    return '';
+  }
+
+  const checkRows = () => {
+    let same = 0;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        if ((gameBoard.gridBoard[i][0] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[i][0] !== '')) {
+          same++;
+          if (same === 3) return gameBoard.gridBoard[i][j];
+        }
+      }
+      same = 0;
+    }
+    return ''
+  }
+
+  const checkColumns = () => {
+    let same = 0;
+    for (let j = 0; j < 3; j++) {
+      for (let i = 0; i < 3; i++) {
+        if ((gameBoard.gridBoard[0][j] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[0][j] !== '')) {
+          same++;
+          if (same === 3) return gameBoard.gridBoard[i][j];
+        }
+      }
+      same = 0;
+    }
+    return '';
+  }
+
+  return { gridBoard, addMark, checkWin };
 })();
 
 const player = (name, piece) => {
