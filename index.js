@@ -58,6 +58,9 @@ const gameBoard = (() => {
     else if (checkColumns() !== '') {
       return checkColumns();
     }
+    else if (checkDiagonals() !== '') {
+      return checkDiagonals();
+    }
     return '';
   }
 
@@ -89,6 +92,26 @@ const gameBoard = (() => {
     return '';
   }
 
+  const checkDiagonals = () => {
+    let same = 0;
+    for (let i = 0; i < 3; i++) {
+      if ((gameBoard.gridBoard[0][0] === gameBoard.gridBoard[i][i]) && (gameBoard.gridBoard[0][0] !== '')) {
+        same++;
+        if (same === 3) return gameBoard.gridBoard[i][i];
+      }
+    }
+    same = 0;
+
+    let i = 0, j = 2;
+    while (i < 3) {
+      if ((gameBoard.gridBoard[0][2] === gameBoard.gridBoard[i][j]) && (gameBoard.gridBoard[0][2] !== '')) {
+        same++;
+        if (same === 3) return gameBoard.gridBoard[i][j];
+      }
+      i++; j--;
+    }
+    return '';
+  }
   return { gridBoard, addMark, checkWin };
 })();
 
