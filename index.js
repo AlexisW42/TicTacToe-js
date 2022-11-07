@@ -46,7 +46,7 @@ const gameBoard = (() => {
       let mark
       piece ? mark = 'o' : mark = 'x';
       gridBoard[i][j] = mark;
-      displayController.updateCell(i, j, mark);
+      displayController.updateCell(i, j, piece);
       return true;
     }
     return false;
@@ -134,7 +134,9 @@ const displayController = (() => {
 
   const updateCell = (i, j, piece) => {
     const table = document.querySelector('table');
-    table.rows[i].cells[j].innerHTML = piece;
+    let mark
+    piece ? mark = '⭕️' : mark = '✖️';
+    table.rows[i].cells[j].innerHTML = mark;
   }
   return { printGameBoard, updateCell }
 })();
